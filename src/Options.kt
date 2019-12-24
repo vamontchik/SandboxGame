@@ -19,7 +19,7 @@ class Options : JPanel(), MouseListener {
         )
     }
 
-    var currSelected: SelectionSquare = options[0] // 0 == BLANK
+    var currSelected: SelectionSquare = options[0].also { it.isToggled = true } // 0 == BLANK
         private set
 
     init {
