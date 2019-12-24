@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import javax.swing.JPanel
 
-class Grid(private val optionsPanelRef: Options) : JPanel(), MouseListener {
+class Grid(private val optionsPanelRef: Options) : JPanel() {
     companion object {
         const val GRID_WIDTH: Int = 25  // amount of Square objects in a row
         const val GRID_HEIGHT: Int = 25 // amount of Square objects in a column
@@ -26,7 +26,21 @@ class Grid(private val optionsPanelRef: Options) : JPanel(), MouseListener {
             Dimension(GRID_WIDTH * Square.SQUARE_WIDTH, GRID_HEIGHT * Square.SQUARE_HEIGHT)
 
         // register the mouse listener
-        addMouseListener(this)
+        addMouseListener(object: MouseListener {
+            override fun mouseReleased(e: MouseEvent?) {
+                if (e == null) return
+
+                val selected: Square = findSquare(e.x, e.y) ?: return
+                selected.type = optionsPanelRef.currSelected.type
+
+                revalidate()
+                repaint()
+            }
+            override fun mouseEntered(e: MouseEvent?) {}
+            override fun mouseClicked(e: MouseEvent?) {}
+            override fun mouseExited(e: MouseEvent?) {}
+            override fun mousePressed(e: MouseEvent?) {}
+        })
     }
 
     override fun paintComponent(g: Graphics?) {
@@ -55,18 +69,4 @@ class Grid(private val optionsPanelRef: Options) : JPanel(), MouseListener {
         }
         return null
     }
-
-    override fun mouseReleased(e: MouseEvent?) {
-        if (e == null) return
-
-        val selected: Square = findSquare(e.x, e.y) ?: return
-        selected.type = optionsPanelRef.currSelected.type
-
-        revalidate()
-        repaint()
-    }
-    override fun mouseEntered(e: MouseEvent?) {}
-    override fun mouseClicked(e: MouseEvent?) {}
-    override fun mouseExited(e: MouseEvent?) {}
-    override fun mousePressed(e: MouseEvent?) {}
 }

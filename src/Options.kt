@@ -1,12 +1,16 @@
 import java.awt.Dimension
 import java.awt.Graphics
+import java.awt.event.ActionEvent
 import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
 import javax.swing.JPanel
+import javax.swing.JToggleButton
+import java.awt.event.MouseListener
+import javax.swing.AbstractAction
+import javax.swing.KeyStroke
 
-class Options : JPanel(), MouseListener {
+class Options : JPanel() {
     companion object {
-        const val TOP_PADDING = 100 // 100 down from the top
+        const val TOP_PADDING = 100   // 100 down from the top
         const val SQUARE_PADDING = 25 // 25 between
     }
 
@@ -22,6 +26,9 @@ class Options : JPanel(), MouseListener {
     var currSelected: SelectionSquare = options[0].also { it.isToggled = true } // 0 == BLANK
         private set
 
+    val playButton: JToggleButton = JToggleButton("Play")
+    private val playButtonStr: String = "PLAY"
+
     init {
         // set preferredSize for pack() in the JFrame
         preferredSize = Dimension(
@@ -29,7 +36,35 @@ class Options : JPanel(), MouseListener {
         )
 
         // register mouse listener
-        addMouseListener(this)
+        addMouseListener(object: MouseListener {
+            override fun mouseReleased(e: MouseEvent?) {
+                if (e == null) return
+                val selected: SelectionSquare = findSquare(e.x, e.y) ?: return
+
+                currSelected.isToggled = false
+                selected.isToggled = true
+                currSelected = selected
+
+                revalidate()
+                repaint()
+            }
+            override fun mouseEntered(e: MouseEvent?) {}
+            override fun mouseClicked(e: MouseEvent?) {}
+            override fun mouseExited(e: MouseEvent?) {}
+            override fun mousePressed(e: MouseEvent?) {}
+        })
+
+        // register key bindings
+        inputMap.put(KeyStroke.getKeyStroke("SPACE"), playButtonStr)
+        actionMap.put(playButtonStr, object: AbstractAction() {
+            override fun actionPerformed(e: ActionEvent?) {
+                if (e == null) return
+                playButton.isSelected = !playButton.isSelected
+            }
+        })
+
+        // add button
+        add(playButton)
     }
 
     override fun paintComponent(g: Graphics?) {
@@ -54,20 +89,4 @@ class Options : JPanel(), MouseListener {
         }
         return null
     }
-
-    override fun mouseReleased(e: MouseEvent?) {
-        if (e == null) return
-        val selected: SelectionSquare = findSquare(e.x, e.y) ?: return
-
-        currSelected.isToggled = false
-        selected.isToggled = true
-        currSelected = selected
-
-        revalidate()
-        repaint()
-    }
-    override fun mouseEntered(e: MouseEvent?) {}
-    override fun mouseClicked(e: MouseEvent?) {}
-    override fun mouseExited(e: MouseEvent?) {}
-    override fun mousePressed(e: MouseEvent?) {}
 }
