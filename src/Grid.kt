@@ -30,7 +30,7 @@ class Grid(private val optionsPanelRef: Options) : JPanel() {
             override fun mouseReleased(e: MouseEvent?) {
                 if (e == null) return
 
-                val selected: Square = findSquare(e.x, e.y) ?: return
+                val selected: Square = findSquare(e.x, e.y, grid.flatten()) ?: return
                 selected.type = optionsPanelRef.currSelected.type
 
                 revalidate()
@@ -53,20 +53,5 @@ class Grid(private val optionsPanelRef: Options) : JPanel() {
                 square.draw(g)
             }
         }
-    }
-
-    private fun findSquare(x: Int, y: Int): Square? {
-        for (row in grid) {
-            for (square in row) {
-                val xLowerBound: Int = square.x
-                val xUpperBound: Int = square.x + Square.SQUARE_WIDTH
-                val yLowerBound: Int = square.y
-                val yUpperBound: Int = square.y + Square.SQUARE_HEIGHT
-                if (x in xLowerBound..xUpperBound && y in yLowerBound..yUpperBound) {
-                    return square
-                }
-            }
-        }
-        return null
     }
 }

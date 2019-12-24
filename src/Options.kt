@@ -11,7 +11,7 @@ import javax.swing.KeyStroke
 class Options : JPanel() {
     companion object {
         const val TOP_PADDING = 100   // 100 down from the top
-        const val SQUARE_PADDING = 25 // 25 between
+        const val SQUARE_PADDING = 25 // 25 between each square
     }
 
     private val options: List<SelectionSquare> = List(SquareType.values().size) {
@@ -26,7 +26,7 @@ class Options : JPanel() {
     var currSelected: SelectionSquare = options[0].also { it.isToggled = true } // 0 == BLANK
         private set
 
-    val playButton: JToggleButton = JToggleButton("Play")
+    private val playButton: JToggleButton = JToggleButton("Play")
     private val playButtonStr: String = "PLAY"
 
     init {
@@ -39,7 +39,7 @@ class Options : JPanel() {
         addMouseListener(object: MouseListener {
             override fun mouseReleased(e: MouseEvent?) {
                 if (e == null) return
-                val selected: SelectionSquare = findSquare(e.x, e.y) ?: return
+                val selected: SelectionSquare = findSquare(e.x, e.y, options) as SelectionSquare? ?: return
 
                 currSelected.isToggled = false
                 selected.isToggled = true
@@ -75,18 +75,5 @@ class Options : JPanel() {
         for (square in options) {
             square.draw(g)
         }
-    }
-
-    private fun findSquare(x: Int, y: Int): SelectionSquare? {
-        for (square in options) {
-            val xLowerBound: Int = square.x
-            val xUpperBound: Int = square.x + Square.SQUARE_WIDTH
-            val yLowerBound: Int = square.y
-            val yUpperBound: Int = square.y + Square.SQUARE_HEIGHT
-            if (x in xLowerBound..xUpperBound && y in yLowerBound..yUpperBound) {
-                return square
-            }
-        }
-        return null
     }
 }
