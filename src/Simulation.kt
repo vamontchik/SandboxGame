@@ -1,55 +1,18 @@
-import javax.swing.JPanel
-import javax.swing.JToggleButton
+class Simulation {
+    var initialState: List<List<Square>> = emptyList()
+        private set
 
-class Simulation(private val optionsRef: Options, private val gridRef: Grid) : JPanel() {
-    private var forReset: List<List<Square>> = emptyList()
-    private var initialState: List<List<Square>> = emptyList()
-    private var canSaveCopy: Boolean = false
+    private var state: List<List<Square>> = emptyList()
 
-    private val playButton: JToggleButton = JToggleButton("Play")
+    fun start(initialState: List<List<Square>>) {
+        state = initialState              // set initial state for sim
+        this.initialState = initialState  // save an initial state copy for reset
 
-    init {
-        // add action to play button
-        playButton.addActionListener {
-            if (it == null) return@addActionListener // ??? necessary ???
-
-            if (playButton.isSelected) {
-                start()
-            } else {
-                reset()
-            }
-        }
-
-        // add button
-        add(playButton)
+        // sim stuff :O
     }
 
-    private fun start() {
-        println("start")
-
-        forReset = gridRef.copyState()      // set initial state for sim
-        initialState = gridRef.copyState()  // save an initial state copy for reset
-        canSaveCopy = true
-
-        optionsRef.isModifiable = false
-        gridRef.isModifiable = false
-
-        simulation()
-    }
-
-    private fun reset() {
-        println("reset")
-
-        gridRef.setState(initialState)
-        initialState = emptyList() // give contents to GC
-        forReset = emptyList()     // give contents to GC
-        canSaveCopy = false
-
-        optionsRef.isModifiable = true
-        gridRef.isModifiable = true
-    }
-
-    private fun simulation() {
-        // do the goods here!!!
+    fun reset() {
+        state = emptyList()               // send to GC
+        this.initialState = emptyList()   // send to GC
     }
 }

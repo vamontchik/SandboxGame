@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import javax.swing.JPanel
 
-class Options : JPanel() {
+class OptionsPanel : JPanel() {
     companion object {
         const val SQUARE_PADDING = 10
         const val WIDTH = 3 * Square.SQUARE_WIDTH

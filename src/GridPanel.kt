@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent
 import java.awt.event.MouseListener
 import javax.swing.JPanel
 
-class Grid(private val optionsPanelRef: Options) : JPanel() {
+class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
     companion object {
         const val GRID_WIDTH: Int = 25  // amount of Square objects in a row
         const val GRID_HEIGHT: Int = 25 // amount of Square objects in a column
