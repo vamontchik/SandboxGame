@@ -1,44 +1,43 @@
 import java.awt.Dimension
 import java.awt.Graphics
-import java.awt.event.ActionEvent
 import java.awt.event.MouseEvent
-import javax.swing.JPanel
-import javax.swing.JToggleButton
 import java.awt.event.MouseListener
-import javax.swing.AbstractAction
-import javax.swing.KeyStroke
+import javax.swing.JPanel
 
 class Options : JPanel() {
     companion object {
-        const val TOP_PADDING = 100   // 100 down from the top
-        const val SQUARE_PADDING = 25 // 25 between each square
+        const val SQUARE_PADDING = 10
+        const val WIDTH = 3 * Square.SQUARE_WIDTH
+        const val TOP_PADDING = 25
     }
 
     private val options: List<SelectionSquare> = List(SquareType.values().size) {
         SelectionSquare(
-            Grid.GRID_WIDTH * Square.SQUARE_WIDTH / 2 - Square.SQUARE_WIDTH / 2,
+            WIDTH / 2 - Square.SQUARE_WIDTH / 2,
             TOP_PADDING + (SQUARE_PADDING + Square.SQUARE_HEIGHT) * it,
             SquareType.values()[it],
             false
         )
     }
 
+    // used by Grid to determine which color to fill in squares with
     var currSelected: SelectionSquare = options[0].also { it.isToggled = true } // 0 == BLANK
         private set
 
-    private val playButton: JToggleButton = JToggleButton("Play")
-    private val playButtonStr: String = "PLAY"
+    // used as a guard for modification of the options,
+    // can be externally modified by Simulation
+    var isModifiable: Boolean = true
 
     init {
         // set preferredSize for pack() in the JFrame
         preferredSize = Dimension(
-            Grid.GRID_WIDTH * Square.SQUARE_WIDTH, Grid.GRID_HEIGHT * Square.SQUARE_HEIGHT
+            WIDTH, (options.size)*(Square.SQUARE_HEIGHT)
         )
 
-        // register mouse listener
+        // register mouse listener to select which color
         addMouseListener(object: MouseListener {
             override fun mouseReleased(e: MouseEvent?) {
-                if (e == null) return
+                if (e == null || !isModifiable) return
                 val selected: SelectionSquare = findSquare(e.x, e.y, options) as SelectionSquare? ?: return
 
                 currSelected.isToggled = false
@@ -53,18 +52,6 @@ class Options : JPanel() {
             override fun mouseExited(e: MouseEvent?) {}
             override fun mousePressed(e: MouseEvent?) {}
         })
-
-        // register key bindings
-        inputMap.put(KeyStroke.getKeyStroke("SPACE"), playButtonStr)
-        actionMap.put(playButtonStr, object: AbstractAction() {
-            override fun actionPerformed(e: ActionEvent?) {
-                if (e == null) return
-                playButton.isSelected = !playButton.isSelected
-            }
-        })
-
-        // add button
-        add(playButton)
     }
 
     override fun paintComponent(g: Graphics?) {

@@ -10,7 +10,7 @@ class Grid(private val optionsPanelRef: Options) : JPanel() {
         const val GRID_HEIGHT: Int = 25 // amount of Square objects in a column
     }
 
-    private val grid: List<List<Square>> = List(GRID_WIDTH) { columnIndex: Int ->
+    private var grid: List<List<Square>> = List(GRID_WIDTH) { columnIndex: Int ->
         List(GRID_HEIGHT) {
             Square(
                 it * Square.SQUARE_WIDTH,
@@ -20,15 +20,19 @@ class Grid(private val optionsPanelRef: Options) : JPanel() {
         }
     }
 
+    // used as a guard for modification of the grid,
+    // can be externally modified by Simulation
+    var isModifiable: Boolean = true
+
     init {
         // set preferredSize for pack() in the JFrame
         preferredSize =
             Dimension(GRID_WIDTH * Square.SQUARE_WIDTH, GRID_HEIGHT * Square.SQUARE_HEIGHT)
 
-        // register the mouse listener
+        // register the mouse listener to allow filling in colors on grid
         addMouseListener(object: MouseListener {
             override fun mouseReleased(e: MouseEvent?) {
-                if (e == null) return
+                if (e == null || !isModifiable) return
 
                 val selected: Square = findSquare(e.x, e.y, grid.flatten()) ?: return
                 selected.type = optionsPanelRef.currSelected.type
@@ -53,5 +57,13 @@ class Grid(private val optionsPanelRef: Options) : JPanel() {
                 square.draw(g)
             }
         }
+    }
+
+    fun copyState(): List<List<Square>> {
+        return grid.toList()      // copy out of class member
+    }
+
+    fun setState(grid: List<List<Square>>) {
+        this.grid = grid.toList() // copy into class member
     }
 }
