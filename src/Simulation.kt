@@ -8,7 +8,7 @@ class Simulation {
         state = initialState              // set initial state for sim
         this.initialState = initialState  // save an initial state copy for reset
 
-        // sim stuff :O
+        // TODO: run simulation!!!
     }
 
     fun reset() {
