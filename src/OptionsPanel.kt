@@ -11,17 +11,11 @@ class OptionsPanel : JPanel() {
         const val TOP_PADDING = 25
     }
 
-    private val options: List<SelectionSquare> = List(SquareType.values().size) {
-        SelectionSquare(
-            WIDTH / 2 - Square.SQUARE_WIDTH / 2,
-            TOP_PADDING + (SQUARE_PADDING + Square.SQUARE_HEIGHT) * it,
-            SquareType.values()[it],
-            false
-        )
-    }
+    // data object for different selection squares
+    val options: Options = Options()
 
     // used by Grid to determine which color to fill in squares with
-    var currSelected: SelectionSquare = options[0].also { it.isToggled = true } // 0 == BLANK
+    var currSelected: SelectionSquare = options.getInitialToggled().also { it.isToggled = true }
         private set
 
     // used as a guard for modification of the options,
@@ -38,7 +32,7 @@ class OptionsPanel : JPanel() {
         addMouseListener(object: MouseListener {
             override fun mouseReleased(e: MouseEvent?) {
                 if (e == null || !isModifiable) return
-                val selected: SelectionSquare = findSquare(e.x, e.y, options) as SelectionSquare? ?: return
+                val selected: SelectionSquare = findSquare(e.x, e.y, options.data) as SelectionSquare? ?: return
 
                 currSelected.isToggled = false
                 selected.isToggled = true
@@ -59,8 +53,6 @@ class OptionsPanel : JPanel() {
 
         super.paintComponent(g)
 
-        for (square in options) {
-            square.draw(g)
-        }
+        options.draw(g)
     }
 }

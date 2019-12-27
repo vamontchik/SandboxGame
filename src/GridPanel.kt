@@ -10,15 +10,8 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
         const val GRID_HEIGHT: Int = 25 // amount of Square objects in a column
     }
 
-    private var grid: List<List<Square>> = List(GRID_WIDTH) { columnIndex: Int ->
-        List(GRID_HEIGHT) {
-            Square(
-                it * Square.SQUARE_WIDTH,
-                columnIndex * Square.SQUARE_HEIGHT,
-                SquareType.BLANK
-            )
-        }
-    }
+    // data object for 2D grid of squares
+    val grid: Grid = Grid()
 
     // used as a guard for modification of the grid,
     // can be externally modified by Simulation
@@ -52,18 +45,14 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
 
         super.paintComponent(g)
 
-        for (row in grid) {
-            for (square in row) {
-                square.draw(g)
-            }
-        }
+        grid.draw(g)
     }
 
     fun copyState(): List<List<Square>> {
-        return grid.toList()      // copy out of class member
+        return grid.copy()       // copy out of class member
     }
 
     fun setState(grid: List<List<Square>>) {
-        this.grid = grid.toList() // copy into class member
+        this.grid.setState(grid) // copy into class member
     }
 }
