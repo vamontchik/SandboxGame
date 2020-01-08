@@ -1,18 +1,14 @@
 import java.awt.Graphics
 
 class Grid {
-    private var grid: List<List<Square>> = List(GridPanel.GRID_WIDTH) { columnIndex: Int ->
-        List(GridPanel.GRID_HEIGHT) {
+    private val grid: MutableList<MutableList<Square>> = MutableList(GridPanel.GRID_WIDTH) { columnIndex: Int ->
+        MutableList(GridPanel.GRID_HEIGHT) {
             Square(
                 it * Square.SQUARE_WIDTH,
                 columnIndex * Square.SQUARE_HEIGHT,
                 SquareType.BLANK
             )
         }
-    }
-
-    fun flatten(): List<Square> {
-        return grid.flatten()
     }
 
     fun draw(g: Graphics) {
@@ -23,11 +19,28 @@ class Grid {
         }
     }
 
-    fun copy(): List<List<Square>> {
-        return grid.toList() // toList() call makes a new copy
+//    fun copy(): List<List<Square>> = grid.copy()
+
+    fun findSquareIndex(x: Int, y: Int): Pair<Int, Int>? {
+        if (x < 0 || x > Square.SQUARE_WIDTH * GridPanel.GRID_WIDTH ||
+            y < 0 || y > Square.SQUARE_HEIGHT * GridPanel.GRID_HEIGHT) {
+            return null
+        }
+
+        return Pair(x / Square.SQUARE_WIDTH, y / Square.SQUARE_HEIGHT)
     }
 
-    fun setState(grid: List<List<Square>>) {
-        this.grid = grid     // old copy gets sent to GC
+    fun setAt(x: Int, y: Int, toSet: SquareType) {
+        grid[y][x] = Square(x * Square.SQUARE_WIDTH, y * Square.SQUARE_HEIGHT, toSet)
     }
+
+    fun getAt(x: Int, y: Int): Square = grid[y][x]
+
+//    fun setState(grid: List<List<Square>>) {
+//        for (i in 0 until this.grid.size) {
+//            for (j in 0 until this.grid[0].size) {
+//                this.grid[i][j] = grid[i][j].copy()
+//            }
+//        }
+//    }
 }

@@ -6,7 +6,6 @@ class SimulationPanel(private val optionsPanelRef: OptionsPanel, private val gri
     private val simulation: Simulation = Simulation()
 
     init {
-        // add action to play button
         playButton.addActionListener {
             if (it == null) return@addActionListener // ??? necessary ???
 
@@ -17,7 +16,6 @@ class SimulationPanel(private val optionsPanelRef: OptionsPanel, private val gri
             }
         }
 
-        // add button
         add(playButton)
     }
 
@@ -25,11 +23,10 @@ class SimulationPanel(private val optionsPanelRef: OptionsPanel, private val gri
         optionsPanelRef.isModifiable = false
         gridPanelRef.isModifiable = false
 
-        simulation.start(gridPanelRef.copyState())
+        simulation.start()
     }
 
     private fun reset() {
-        gridPanelRef.setState(simulation.initialState)
         simulation.reset()
 
         optionsPanelRef.isModifiable = true

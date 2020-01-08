@@ -4,7 +4,7 @@ import javax.swing.WindowConstants
 
 fun main() {
     // set look & feel from windows 10, not java default
-    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+    // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
 
     val frame = JFrame("Sandbox")
     frame.defaultCloseOperation = WindowConstants.EXIT_ON_CLOSE

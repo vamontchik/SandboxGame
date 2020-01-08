@@ -12,11 +12,7 @@ class OptionsPanel : JPanel() {
     }
 
     // data object for different selection squares
-    val options: Options = Options()
-
-    // used by Grid to determine which color to fill in squares with
-    var currSelected: SelectionSquare = options.getInitialToggled().also { it.isToggled = true }
-        private set
+    private val options: Options = Options()
 
     // used as a guard for modification of the options,
     // can be externally modified by Simulation
@@ -25,18 +21,16 @@ class OptionsPanel : JPanel() {
     init {
         // set preferredSize for pack() in the JFrame
         preferredSize = Dimension(
-            WIDTH, (options.size)*(Square.SQUARE_HEIGHT)
+            WIDTH, (SquareType.values().size)*(Square.SQUARE_HEIGHT)
         )
 
         // register mouse listener to select which color
         addMouseListener(object: MouseListener {
             override fun mouseReleased(e: MouseEvent?) {
                 if (e == null || !isModifiable) return
-                val selected: SelectionSquare = findSquare(e.x, e.y, options.data) as SelectionSquare? ?: return
+                val index: Int = options.findSquareIndex(e.x, e.y) ?: return
 
-                currSelected.isToggled = false
-                selected.isToggled = true
-                currSelected = selected
+                options.setNewToggle(index)
 
                 revalidate()
                 repaint()
@@ -47,6 +41,8 @@ class OptionsPanel : JPanel() {
             override fun mousePressed(e: MouseEvent?) {}
         })
     }
+
+    fun getCurrentColor() = options.getCurrentColor()
 
     override fun paintComponent(g: Graphics?) {
         if (g == null) return

@@ -11,7 +11,7 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
     }
 
     // data object for 2D grid of squares
-    val grid: Grid = Grid()
+    private val grid: Grid = Grid()
 
     // used as a guard for modification of the grid,
     // can be externally modified by Simulation
@@ -27,8 +27,10 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
             override fun mouseReleased(e: MouseEvent?) {
                 if (e == null || !isModifiable) return
 
-                val selected: Square = findSquare(e.x, e.y, grid.flatten()) ?: return
-                selected.type = optionsPanelRef.currSelected.type
+                // .first == x, as an index in the grid
+                // .second == y, as an index in the grid
+                val coordinates: Pair<Int, Int> = grid.findSquareIndex(e.x, e.y) ?: return
+                grid.setAt(coordinates.first, coordinates.second, optionsPanelRef.getCurrentColor())
 
                 revalidate()
                 repaint()
@@ -48,11 +50,7 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
         grid.draw(g)
     }
 
-    fun copyState(): List<List<Square>> {
-        return grid.copy()       // copy out of class member
-    }
-
-    fun setState(grid: List<List<Square>>) {
-        this.grid.setState(grid) // copy into class member
-    }
+//    fun setState(grid: List<List<Square>>) {
+//        this.grid.setState(grid) // copy into class member
+//    }
 }
