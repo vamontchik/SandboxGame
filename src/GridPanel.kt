@@ -49,8 +49,4 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
 
         grid.draw(g)
     }
-
-//    fun setState(grid: List<List<Square>>) {
-//        this.grid.setState(grid) // copy into class member
-//    }
 }

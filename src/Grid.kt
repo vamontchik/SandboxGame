@@ -19,7 +19,16 @@ class Grid {
         }
     }
 
-//    fun copy(): List<List<Square>> = grid.copy()
+//fun copy(): List<List<Square>> {
+//    val localCopy: MutableList<MutableList<Square>> = mutableListOf()
+//    for (innerList in this) {
+//        val newInnerList: MutableList<Square> = mutableListOf()
+//        for (square in innerList) {
+//            newInnerList.add(square.copy())
+//        }
+//    }
+//    return localCopy
+//}
 
     fun findSquareIndex(x: Int, y: Int): Pair<Int, Int>? {
         if (x < 0 || x > Square.SQUARE_WIDTH * GridPanel.GRID_WIDTH ||
