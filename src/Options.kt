@@ -10,12 +10,10 @@ class Options {
         )
     }
 
-    private var current: Int = 0.also { setNewToggle(0) }
+    private var current: Int = 0.also { setNewToggle(it) }
 
     fun draw(g: Graphics) {
-        for (square in data) {
-            square.draw(g)
-        }
+        data.forEach { it.draw(g) }
     }
 
     fun setNewToggle(index: Int) {
@@ -30,8 +28,8 @@ class Options {
         data[index] =
             SelectionSquare(
                 Square(OptionsPanel.WIDTH / 2 - Square.SQUARE_WIDTH / 2,
-                    OptionsPanel.TOP_PADDING + (OptionsPanel.SQUARE_PADDING + Square.SQUARE_HEIGHT) * index,
-                    SquareType.values()[index]),
+                OptionsPanel.TOP_PADDING + (OptionsPanel.SQUARE_PADDING + Square.SQUARE_HEIGHT) * index,
+                SquareType.values()[index]),
                 true
             )
 

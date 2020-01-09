@@ -3,7 +3,7 @@ import javax.swing.JToggleButton
 
 class SimulationPanel(private val optionsPanelRef: OptionsPanel, private val gridPanelRef: GridPanel) : JPanel() {
     private val playButton: JToggleButton = JToggleButton("Play")
-    private val simulation: Simulation = Simulation()
+    private val simulation: Simulation = Simulation(gridPanelRef)
 
     init {
         playButton.addActionListener {

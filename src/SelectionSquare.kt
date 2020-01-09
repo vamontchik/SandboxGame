@@ -1,7 +1,7 @@
 import java.awt.Color
 import java.awt.Graphics
 
-data class SelectionSquare(val square: Square, var isToggled: Boolean) {
+data class SelectionSquare(val square: Square, val isToggled: Boolean) {
     fun draw(g: Graphics) {
         square.draw(g)
         if (isToggled) {

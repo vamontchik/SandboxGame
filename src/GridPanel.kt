@@ -11,7 +11,7 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
     }
 
     // data object for 2D grid of squares
-    private val grid: Grid = Grid()
+    val grid: Grid = Grid()
 
     // used as a guard for modification of the grid,
     // can be externally modified by Simulation
@@ -32,8 +32,7 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
                 val coordinates: Pair<Int, Int> = grid.findSquareIndex(e.x, e.y) ?: return
                 grid.setAt(coordinates.first, coordinates.second, optionsPanelRef.getCurrentColor())
 
-                revalidate()
-                repaint()
+                redraw()
             }
             override fun mouseEntered(e: MouseEvent?) {}
             override fun mouseClicked(e: MouseEvent?) {}
@@ -48,5 +47,10 @@ class GridPanel(private val optionsPanelRef: OptionsPanel) : JPanel() {
         super.paintComponent(g)
 
         grid.draw(g)
+    }
+
+    fun redraw() {
+        revalidate()
+        repaint()
     }
 }
