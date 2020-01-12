@@ -43,12 +43,4 @@ class Grid {
     fun setAt(x: Int, y: Int, toSet: SquareType) {
         grid[y][x] = Square(x * Square.SQUARE_WIDTH, y * Square.SQUARE_HEIGHT, toSet)
     }
-
-//    fun setState(grid: List<List<Square>>) {
-//        for (i in 0 until this.grid.size) {
-//            for (j in 0 until this.grid[0].size) {
-//                this.grid[i][j] = grid[i][j].copy()
-//            }
-//        }
-//    }
 }

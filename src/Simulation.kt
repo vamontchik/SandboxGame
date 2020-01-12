@@ -9,7 +9,7 @@ class Simulation(private val gridPanelRef: GridPanel) {
 
     fun start() {
         // previous copy is sent to GC
-        future = service.scheduleAtFixedRate({ update() }, 1L, 1L, TimeUnit.SECONDS)
+        future = service.scheduleAtFixedRate({ update() }, 1L, 250L, TimeUnit.MILLISECONDS)
     }
 
     fun reset() {
@@ -20,7 +20,6 @@ class Simulation(private val gridPanelRef: GridPanel) {
     }
 
     private fun update() {
-        // TODO: iterate through board and apply rules... how do the blocks interact?
         applyRules(gridPanelRef.grid)
         gridPanelRef.redraw()
     }
